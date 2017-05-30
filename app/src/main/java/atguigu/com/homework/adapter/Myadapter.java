@@ -16,7 +16,6 @@ import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import atguigu.com.homework.R;
@@ -33,7 +32,7 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 public class MyAdapter extends RecyclerView.Adapter {
 
     private final Context context;
-    private final ArrayList<YuleBean.ListBean> datas;
+    private final List<YuleBean.ListBean> datas;
 
     /**
      * 视频
@@ -63,10 +62,11 @@ public class MyAdapter extends RecyclerView.Adapter {
 
 
 
-    public MyAdapter(Context context, ArrayList<YuleBean.ListBean> datas){
+    public MyAdapter(Context context, List<YuleBean.ListBean> datas){
         this.context = context;
         this.datas = datas;
     }
+
 
     /**
      * 相当于ListView适配器中的getView的创建holder布局
@@ -80,7 +80,6 @@ public class MyAdapter extends RecyclerView.Adapter {
 
         return initViewHolder(viewType);
     }
-
     private RecyclerView.ViewHolder initViewHolder(int itemViewType) {
         RecyclerView.ViewHolder viewHolder = null;
         View convertView = null;
@@ -111,8 +110,66 @@ public class MyAdapter extends RecyclerView.Adapter {
         return viewHolder;
     }
 
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == TYPE_VIDEO) {
+            VideoHoder videoHoder = (VideoHoder) holder;
+            videoHoder.setData(datas.get(position));
+        } else if (getItemViewType(position) == TYPE_IMAGE) {
+            ImageHolder imageHolder = (ImageHolder) holder;
+            imageHolder.setData(datas.get(position));
+        } else if (getItemViewType(position) == TYPE_TEXT) {
+            TextHolder textHolder = (TextHolder) holder;
+            textHolder.setData(datas.get(position));
+        } else if (getItemViewType(position) == TYPE_GIF) {
+            GifHolder gifHolder = (GifHolder) holder;
+            gifHolder.setData(datas.get(position));
+        } else if (getItemViewType(position) == TYPE_AD){
+          /*  ADHolder adHolder = (ADHolder) holder;
+            adHolder.setData(datas.get(position));*/
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return datas.size();
+    }
+
+    @Override // 得到当前item是什么   类型
+    public int getItemViewType(int position) {
+
+        int itemViewType = -1;
+        //根据位置，从列表中得到一个数据对象
+        YuleBean.ListBean listBean = datas.get(position);
+        String type = listBean.getType();//得到类型
+
+        if ("video".equals(type)) {
+            itemViewType = TYPE_VIDEO;
+        } else if ("image".equals(type)) {
+            itemViewType = TYPE_IMAGE;
+        } else if ("text".equals(type)) {
+            itemViewType = TYPE_TEXT;
+        } else if ("gif".equals(type)) {
+            itemViewType = TYPE_GIF;
+        } else {
+            itemViewType = TYPE_AD;//广播
+        }
+        return itemViewType;
+    }
+
     //父类
     class BaseViewHolder extends RecyclerView.ViewHolder{
+
+        ImageView ivHeadpic;
+        TextView tvName;
+        TextView tvTimeRefresh;
+        ImageView ivRightMore;
+        ImageView ivVideoKind;
+        TextView tvVideoKindText;
+        TextView tvShenheDingNumber;
+        TextView tvShenheCaiNumber;
+        TextView tvPostsNumber;
+        LinearLayout llDownload;
 
         public BaseViewHolder(View convertView) {
             super(convertView);
@@ -130,17 +187,6 @@ public class MyAdapter extends RecyclerView.Adapter {
             llDownload = (LinearLayout) convertView.findViewById(R.id.ll_download);
 
         }
-
-        ImageView ivHeadpic;
-        TextView tvName;
-        TextView tvTimeRefresh;
-        ImageView ivRightMore;
-        ImageView ivVideoKind;
-        TextView tvVideoKindText;
-        TextView tvShenheDingNumber;
-        TextView tvShenheCaiNumber;
-        TextView tvPostsNumber;
-        LinearLayout llDownload;
 
 
         // 方法
@@ -174,32 +220,6 @@ public class MyAdapter extends RecyclerView.Adapter {
         }
 
 
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-        if (getItemViewType(position) == TYPE_VIDEO) {
-            VideoHoder videoHoder = (VideoHoder) holder;
-            videoHoder.setData(datas.get(position));
-        } else if (getItemViewType(position) == TYPE_IMAGE) {
-            ImageHolder imageHolder = (ImageHolder) holder;
-            imageHolder.setData(datas.get(position));
-        } else if (getItemViewType(position) == TYPE_TEXT) {
-            TextHolder textHolder = (TextHolder) holder;
-            textHolder.setData(datas.get(position));
-        } else if (getItemViewType(position) == TYPE_GIF) {
-            GifHolder gifHolder = (GifHolder) holder;
-            gifHolder.setData(datas.get(position));
-        } /*else if (getItemViewType(position) == TYPE_AD){
-            ADHolder adHolder = (ADHolder) holder;
-            adHolder.setData(datas.get(position));
-        }*/
-    }
-
-    @Override
-    public int getItemCount() {
-        return 4;
     }
 
     // 电影的类
@@ -243,8 +263,9 @@ public class MyAdapter extends RecyclerView.Adapter {
             }
             tvPlayNums.setText(mediaItem.getVideo().getPlaycount() + "次播放");
             tvVideoDuration.setText(utils.stringForTime(mediaItem.getVideo().getDuration() * 1000) + "");
-
         }
+
+
     }
     //图片的类
     public class ImageHolder extends BaseViewHolder {
