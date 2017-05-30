@@ -59,6 +59,10 @@ public class YuleFragment extends BaseFragment {
         refrashData(view);
 
 
+
+
+
+
         return view;
     }
 
@@ -189,6 +193,5 @@ public class YuleFragment extends BaseFragment {
     public int getCount() {
         return datas.size();
     }
-
 
 }
