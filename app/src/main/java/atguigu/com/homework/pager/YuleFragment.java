@@ -190,4 +190,5 @@ public class YuleFragment extends BaseFragment {
         return datas.size();
     }
 
+
 }
