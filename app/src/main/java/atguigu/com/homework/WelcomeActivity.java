@@ -22,6 +22,7 @@ public class WelcomeActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+            finish();
         }
     };
 
@@ -29,7 +30,15 @@ public class WelcomeActivity extends AppCompatActivity {
     public boolean onTouchEvent(MotionEvent event) {
 
         startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+        finish();
 
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        handler.removeCallbacksAndMessages(null);
     }
 }

@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 public abstract class BaseFragment extends Fragment {
 
-    private Context context;
+    public Context context;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public abstract class BaseFragment extends Fragment {
 
 
     //公共的方法  需要的话可以自行的去实现
-    private void initData() {
+    protected void initData() {
 
     }
 }
